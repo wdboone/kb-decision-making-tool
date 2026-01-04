@@ -1,0 +1,1815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KB's Decision Making Tool for 2026 and Beyond</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1a472a;
+            --secondary: #2d5f3f;
+            --accent: #f4a261;
+            --light: #faf9f6;
+            --dark: #0f2818;
+            --gray: #6b7280;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #faf9f6 0%, #e8e5dc 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        h1, h2, h3, h4 {
+            font-weight: 700;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            border-bottom: 4px solid var(--accent);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+
+        nav {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .nav-btn {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(26, 71, 42, 0.3);
+        }
+
+        .nav-btn.active {
+            background: var(--accent);
+            color: var(--dark);
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+            border-left: 4px solid var(--accent);
+        }
+
+        .card h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 2rem;
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 10px;
+        }
+
+        .card h3 {
+            color: var(--secondary);
+            margin: 20px 0 15px 0;
+            font-size: 1.5rem;
+        }
+
+        .trade-item {
+            margin-bottom: 15px;
+        }
+
+        .trade-header {
+            background: var(--secondary);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .trade-header:hover {
+            background: var(--primary);
+        }
+
+        .trade-header h4 {
+            margin: 0;
+            font-size: 1.3rem;
+        }
+
+        .trade-content {
+            display: none;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 0 0 8px 8px;
+            margin-top: 2px;
+        }
+
+        .trade-content.show {
+            display: block;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 15px 0;
+        }
+
+        .info-box {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid var(--accent);
+        }
+
+        .info-box strong {
+            color: var(--primary);
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .link-section {
+            margin: 15px 0;
+        }
+
+        .link-section a {
+            color: var(--secondary);
+            text-decoration: none;
+            display: inline-block;
+            margin: 5px 10px 5px 0;
+            padding: 8px 15px;
+            background: var(--light);
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            border: 1px solid var(--secondary);
+        }
+
+        .link-section a:hover {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .vocab-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f9f9f9 100%);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid var(--accent);
+            transition: all 0.3s ease;
+        }
+
+        .vocab-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .vocab-word {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .vocab-def {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--primary);
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 3px rgba(45, 95, 63, 0.1);
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .btn {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(26, 71, 42, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--accent);
+            color: var(--dark);
+        }
+
+        .btn-secondary:hover {
+            background: #e8934e;
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .feedback.show {
+            display: block;
+        }
+
+        .feedback.success {
+            background: #d1fae5;
+            border-left: 4px solid var(--success);
+        }
+
+        .feedback.warning {
+            background: #fef3c7;
+            border-left: 4px solid var(--warning);
+        }
+
+        .feedback.error {
+            background: #fee2e2;
+            border-left: 4px solid var(--error);
+        }
+
+        .step-list {
+            counter-reset: step-counter;
+            list-style: none;
+            padding: 0;
+        }
+
+        .step-list li {
+            counter-increment: step-counter;
+            padding: 20px;
+            margin-bottom: 15px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent);
+            position: relative;
+            padding-left: 60px;
+        }
+
+        .step-list li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--secondary);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .quiz-question {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .quiz-options {
+            list-style: none;
+            padding: 0;
+            margin-top: 15px;
+        }
+
+        .quiz-options li {
+            padding: 12px;
+            margin-bottom: 10px;
+            background: #f9f9f9;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .quiz-options li:hover {
+            background: #e8e5dc;
+        }
+
+        .quiz-options li.selected {
+            border-color: var(--secondary);
+            background: #d1fae5;
+        }
+
+        .quiz-options li.correct {
+            background: #d1fae5;
+            border-color: var(--success);
+        }
+
+        .quiz-options li.incorrect {
+            background: #fee2e2;
+            border-color: var(--error);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--secondary) 0%, var(--accent) 100%);
+            transition: width 0.3s ease;
+        }
+
+        .encouragement {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid var(--success);
+            font-weight: 500;
+            display: none;
+        }
+
+        .encouragement.show {
+            display: block;
+        }
+
+        .scenario-card {
+            background: white;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .company-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .company-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid var(--secondary);
+            transition: all 0.3s ease;
+        }
+
+        .company-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(26, 71, 42, 0.2);
+        }
+
+        .company-name {
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+            
+            nav {
+                flex-direction: column;
+            }
+            
+            .nav-btn {
+                width: 100%;
+            }
+            
+            .info-grid,
+            .vocab-grid,
+            .company-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>KB's Decision Making Tool for 2026 and Beyond</h1>
+        <p>Your comprehensive guide to career success, personal development, and smart decision-making</p>
+    </header>
+
+    <div class="container">
+        <nav>
+            <button class="nav-btn active" onclick="showSection('decision-steps')">Decision Making Steps</button>
+            <button class="nav-btn" onclick="showSection('trades')">Explore Trades</button>
+            <button class="nav-btn" onclick="showSection('vocabulary')">Vocabulary Builder</button>
+            <button class="nav-btn" onclick="showSection('applications')">Mock Applications</button>
+            <button class="nav-btn" onclick="showSection('scenarios')">Decision Scenarios</button>
+            <button class="nav-btn" onclick="showSection('drivers-test')">Driver's License Test</button>
+            <button class="nav-btn" onclick="showSection('companies')">Hiring Companies</button>
+        </nav>
+
+        <!-- Decision Making Steps Section -->
+        <section id="decision-steps" class="section active">
+            <div class="card">
+                <h2>Fundamental Steps for Making Decisions in Life</h2>
+                <p style="margin-bottom: 20px;">Making good decisions is a skill you can develop. Follow these proven steps to make choices you can feel confident about:</p>
+                
+                <ul class="step-list">
+                    <li>
+                        <strong>Identify the Decision</strong><br>
+                        Clearly define what decision you need to make. Write it down in one sentence. What exactly are you choosing between?
+                    </li>
+                    <li>
+                        <strong>Gather Information</strong><br>
+                        Research your options thoroughly. Talk to people with experience, read about it, watch videos, and collect facts before deciding.
+                    </li>
+                    <li>
+                        <strong>Consider Your Values and Goals</strong><br>
+                        Think about what matters most to you. Does this decision align with your long-term goals? Your values should guide your choices.
+                    </li>
+                    <li>
+                        <strong>List Your Options</strong><br>
+                        Write down all possible choices. Sometimes the best option isn't obvious at first. Brainstorm alternatives.
+                    </li>
+                    <li>
+                        <strong>Weigh the Pros and Cons</strong><br>
+                        For each option, list the advantages and disadvantages. Consider short-term and long-term consequences.
+                    </li>
+                    <li>
+                        <strong>Seek Advice from Trusted People</strong><br>
+                        Talk to parents, teachers, mentors, or professionals. They can offer perspectives you might not have considered.
+                    </li>
+                    <li>
+                        <strong>Trust Your Instincts</strong><br>
+                        After gathering information and advice, listen to your gut feeling. Your intuition matters, especially when paired with facts.
+                    </li>
+                    <li>
+                        <strong>Make a Choice and Commit</strong><br>
+                        Once you've thoroughly considered everything, make your decision. Don't second-guess endlessly. Commit to your choice.
+                    </li>
+                    <li>
+                        <strong>Take Action</strong><br>
+                        Create a plan and start taking steps toward your decision. Break it into smaller, manageable actions.
+                    </li>
+                    <li>
+                        <strong>Reflect and Learn</strong><br>
+                        After some time, evaluate your decision. What worked? What didn't? Every decision teaches you something valuable for next time.
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Trades Section -->
+        <section id="trades" class="section">
+            <div class="card">
+                <h2>Explore Trade Careers</h2>
+                <p style="margin-bottom: 25px;">Trade careers offer excellent opportunities for stable income, job security, and professional growth. Explore these options to find what interests you:</p>
+
+                <!-- HVAC -->
+                <div class="trade-item">
+                    <div class="trade-header" onclick="toggleTrade('hvac')">
+                        <h4>HVAC Technician</h4>
+                        <span id="hvac-arrow">▼</span>
+                    </div>
+                    <div class="trade-content" id="hvac-content">
+                        <p><strong>Definition:</strong> HVAC (Heating, Ventilation, and Air Conditioning) technicians install, maintain, and repair heating, cooling, and ventilation systems in homes, businesses, and industrial facilities.</p>
+                        
+                        <div class="info-grid">
+                            <div class="info-box">
+                                <strong>Average Salary in Tennessee:</strong>
+                                Entry Level: $35,000 - $42,000/year<br>
+                                Experienced: $45,000 - $65,000/year<br>
+                                Master Level: $65,000 - $85,000+/year
+                            </div>
+                            <div class="info-box">
+                                <strong>Job Outlook:</strong>
+                                Excellent growth expected (15% through 2030). High demand in Tennessee due to climate needs and construction growth.
+                            </div>
+                        </div>
+
+                        <h4 style="margin-top: 20px;">Trade Schools in Nashville/Gallatin Area:</h4>
+                        <div class="link-section">
+                            <a href="https://www.nscc.edu/" target="_blank">Nashville State Community College</a>
+                            <a href="https://www.volstate.edu/" target="_blank">Volunteer State Community College</a>
+                            <a href="https://www.tntech.edu/" target="_blank">Tennessee College of Applied Technology</a>
+                        </div>
+
+                        <h4 style="margin-top: 20px;">Learn More (YouTube):</h4>
+                        <div class="link-section">
+                            <a href="https://www.youtube.com/results?search_query=HVAC+technician+day+in+the+life" target="_blank">Day in the Life of HVAC Tech</a>
+                            <a href="https://www.youtube.com/results?search_query=HVAC+career+guide" target="_blank">HVAC Career Guide</a>
+                            <a href="https://www.youtube.com/results?search_query=HVAC+training+basics" target="_blank">HVAC Training Basics</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Electrical -->
+                <div class="trade-item">
+                    <div class="trade-header" onclick="toggleTrade('electrical')">
+                        <h4>Electrician</h4>
+                        <span id="electrical-arrow">▼</span>
+                    </div>
+                    <div class="trade-content" id="electrical-content">
+                        <p><strong>Definition:</strong> Electricians install, maintain, and repair electrical power, communications, lighting, and control systems in homes, businesses, and factories.</p>
+                        
+                        <div class="info-grid">
+                            <div class="info-box">
+                                <strong>Average Salary in Tennessee:</strong>
+                                Apprentice: $30,000 - $38,000/year<br>
+                                Journeyman: $45,000 - $60,000/year<br>
+                                Master Electrician: $65,000 - $90,000+/year
+                            </div>
+                            <div class="info-box">
+                                <strong>Job Outlook:</strong>
+                                Strong growth (9% through 2030). Consistent demand for new construction, maintenance, and renewable energy installations.
+                            </div>
+                        </div>
+
+                        <h4 style="margin-top: 20px;">Trade Schools in Nashville/Gallatin Area:</h4>
+                        <div class="link-section">
+                            <a href="https://www.nscc.edu/" target="_blank">Nashville State Community College</a>
+                            <a href="https://www.volstate.edu/" target="_blank">Volunteer State Community College</a>
+                            <a href="https://millersville.tcattech.edu/" target="_blank">TCAT Millersville</a>
+                        </div>
+
+                        <h4 style="margin-top: 20px;">Learn More (YouTube):</h4>
+                        <div class="link-section">
+                            <a href="https://www.youtube.com/results?search_query=electrician+day+in+the+life" target="_blank">Day in the Life of Electrician</a>
+                            <a href="https://www.youtube.com/results?search_query=how+to+become+electrician" target="_blank">How to Become an Electrician</a>
+                            <a href="https://www.youtube.com/results?search_query=electrician+career+path" target="_blank">Electrician Career Path</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Plumbing -->
+                <div class="trade-item">
+                    <div class="trade-header" onclick="toggleTrade('plumbing')">
+                        <h4>Plumber</h4>
+                        <span id="plumbing-arrow">▼</span>
+                    </div>
+                    <div class="trade-content" id="plumbing-content">
+                        <p><strong>Definition:</strong> Plumbers install, repair, and maintain pipes and fixtures for water, gas, and sewage systems in residential, commercial, and industrial buildings.</p>
+                        
+                        <div class="info-grid">
+                            <div class="info-box">
+                                <strong>Average Salary in Tennessee:</strong>
+                                Apprentice: $28,000 - $36,000/year<br>
+                                Journeyman: $42,000 - $58,000/year<br>
+                                Master Plumber: $60,000 - $85,000+/year
+                            </div>
+                            <div class="info-box">
+                                <strong>Job Outlook:</strong>
+                                Good growth (5% through 2030). Steady demand for new construction and infrastructure maintenance.
+                            </div>
+                        </div>
+
+                        <h4 style="margin-top: 20px;">Trade Schools in Nashville/Gallatin Area:</h4>
+                        <div class="link-section">
+                            <a href="https://www.volstate.edu/" target="_blank">Volunteer State Community College</a>
+                            <a href="https://www.nscc.edu/" target="_blank">Nashville State Community College</a>
+                            <a href="https://www.tntech.edu/" target="_blank">Tennessee College of Applied Technology</a>
+                        </div>
+
+                        <h4 style="margin-top: 20px;">Learn More (YouTube):</h4>
+                        <div class="link-section">
+                            <a href="https://www.youtube.com/results?search_query=plumber+day+in+the+life" target="_blank">Day in the Life of Plumber</a>
+                            <a href="https://www.youtube.com/results?search_query=plumbing+career+overview" target="_blank">Plumbing Career Overview</a>
+                            <a href="https://www.youtube.com/results?search_query=plumbing+apprenticeship" target="_blank">Plumbing Apprenticeship</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Welding -->
+                <div class="trade-item">
+                    <div class="trade-header" onclick="toggleTrade('welding')">
+                        <h4>Welder</h4>
+                        <span id="welding-arrow">▼</span>
+                    </div>
+                    <div class="trade-content" id="welding-content">
+                        <p><strong>Definition:</strong> Welders use heat and specialized equipment to join metal parts together, working in construction, manufacturing, automotive, and other industries.</p>
+                        
+                        <div class="info-grid">
+                            <div class="info-box">
+                                <strong>Average Salary in Tennessee:</strong>
+                                Entry Level: $32,000 - $40,000/year<br>
+                                Experienced: $42,000 - $58,000/year<br>
+                                Certified Specialist: $60,000 - $80,000+/year
+                            </div>
+                            <div class="info-box">
+                                <strong>Job Outlook:</strong>
+                                Steady demand (3% growth through 2030). Strong need in manufacturing and construction sectors.
+                            </div>
+                        </div>
+
+                        <h4 style="margin-top: 20px;">Trade Schools in Nashville/Gallatin Area:</h4>
+                        <div class="link-section">
+                            <a href="https://www.volstate.edu/" target="_blank">Volunteer State Community College</a>
+                            <a href="https://nashville.tcattech.edu/" target="_blank">TCAT Nashville</a>
+                            <a href="https://www.nscc.edu/" target="_blank">Nashville State Community College</a>
+                        </div>
+
+                        <h4 style="margin-top: 20px;">Learn More (YouTube):</h4>
+                        <div class="link-section">
+                            <a href="https://www.youtube.com/results?search_query=welder+career+guide" target="_blank">Welder Career Guide</a>
+                            <a href="https://www.youtube.com/results?search_query=welding+day+in+the+life" target="_blank">Day in the Life of Welder</a>
+                            <a href="https://www.youtube.com/results?search_query=welding+school+what+to+expect" target="_blank">Welding School Guide</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Carpentry -->
+                <div class="trade-item">
+                    <div class="trade-header" onclick="toggleTrade('carpentry')">
+                        <h4>Carpenter</h4>
+                        <span id="carpentry-arrow">▼</span>
+                    </div>
+                    <div class="trade-content" id="carpentry-content">
+                        <p><strong>Definition:</strong> Carpenters construct, install, and repair structures and fixtures made from wood and other materials, working on homes, buildings, and other construction projects.</p>
+                        
+                        <div class="info-grid">
+                            <div class="info-box">
+                                <strong>Average Salary in Tennessee:</strong>
+                                Entry Level: $28,000 - $36,000/year<br>
+                                Experienced: $40,000 - $55,000/year<br>
+                                Master Carpenter: $58,000 - $75,000+/year
+                            </div>
+                            <div class="info-box">
+                                <strong>Job Outlook:</strong>
+                                Good growth (2% through 2030). Steady demand in residential and commercial construction.
+                            </div>
+                        </div>
+
+                        <h4 style="margin-top: 20px;">Trade Schools in Nashville/Gallatin Area:</h4>
+                        <div class="link-section">
+                            <a href="https://www.volstate.edu/" target="_blank">Volunteer State Community College</a>
+                            <a href="https://nashville.tcattech.edu/" target="_blank">TCAT Nashville</a>
+                            <a href="https://www.nscc.edu/" target="_blank">Nashville State Community College</a>
+                        </div>
+
+                        <h4 style="margin-top: 20px;">Learn More (YouTube):</h4>
+                        <div class="link-section">
+                            <a href="https://www.youtube.com/results?search_query=carpenter+day+in+the+life" target="_blank">Day in the Life of Carpenter</a>
+                            <a href="https://www.youtube.com/results?search_query=carpentry+career+path" target="_blank">Carpentry Career Path</a>
+                            <a href="https://www.youtube.com/results?search_query=carpentry+apprenticeship" target="_blank">Carpentry Apprenticeship</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Automotive Technician -->
+                <div class="trade-item">
+                    <div class="trade-header" onclick="toggleTrade('automotive')">
+                        <h4>Automotive Technician</h4>
+                        <span id="automotive-arrow">▼</span>
+                    </div>
+                    <div class="trade-content" id="automotive-content">
+                        <p><strong>Definition:</strong> Automotive technicians inspect, maintain, and repair cars and light trucks, diagnosing problems and performing necessary repairs on mechanical and electronic systems.</p>
+                        
+                        <div class="info-grid">
+                            <div class="info-box">
+                                <strong>Average Salary in Tennessee:</strong>
+                                Entry Level: $28,000 - $35,000/year<br>
+                                Experienced: $38,000 - $52,000/year<br>
+                                Master Technician: $55,000 - $75,000+/year
+                            </div>
+                            <div class="info-box">
+                                <strong>Job Outlook:</strong>
+                                Steady demand. Growing need for technicians skilled in electric and hybrid vehicles.
+                            </div>
+                        </div>
+
+                        <h4 style="margin-top: 20px;">Trade Schools in Nashville/Gallatin Area:</h4>
+                        <div class="link-section">
+                            <a href="https://nashville.tcattech.edu/" target="_blank">TCAT Nashville</a>
+                            <a href="https://www.nscc.edu/" target="_blank">Nashville State Community College</a>
+                            <a href="https://www.volstate.edu/" target="_blank">Volunteer State Community College</a>
+                        </div>
+
+                        <h4 style="margin-top: 20px;">Learn More (YouTube):</h4>
+                        <div class="link-section">
+                            <a href="https://www.youtube.com/results?search_query=automotive+technician+day+in+the+life" target="_blank">Day in the Life of Auto Tech</a>
+                            <a href="https://www.youtube.com/results?search_query=automotive+technician+career" target="_blank">Auto Tech Career Guide</a>
+                            <a href="https://www.youtube.com/results?search_query=automotive+technology+school" target="_blank">Auto Tech School Info</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Vocabulary Section -->
+        <section id="vocabulary" class="section">
+            <div class="card">
+                <h2>Vocabulary Builder - 40 Essential Words</h2>
+                <p style="margin-bottom: 25px;">Building a strong vocabulary helps you communicate professionally and confidently. Master these 40 words to articulate yourself effectively:</p>
+                
+                <div class="vocab-grid">
+                    <div class="vocab-card">
+                        <div class="vocab-word">Articulate</div>
+                        <div class="vocab-def">To express thoughts clearly and effectively in words.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-word">Proficient</div>
+                        <div class="vocab-def">Skilled and competent in a particular area or task.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-word">Diligent</div>
+                        <div class="vocab-def">Showing care and effort in your work; hardworking.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-word">Initiative</div>
+                        <div class="vocab-def">The ability to start tasks independently without being told.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-word">Collaborate</div>
+                        <div class="vocab-def">To work together with others toward a common goal.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-word">Reliable</div>
+                        <div class="vocab-def">Consistently dependable and trustworthy.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-word">Versatile</div>
+                        <div class="vocab-def">Able to adapt to many different functions or activities.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-word">Conscientious</div>
+                        <div class="vocab-def">Careful and thorough in your work; guided by a sense of duty.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-word">Meticulous</div>
+                        <div class="vocab-def">Showing great attention to detail; very careful and precise.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-word">Competent</div>
+                        <div class="vocab-def">Having the necessary ability or skills to do something well.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-word">Demonstrate</div>
+                        <div class="vocab-def">To show or prove something through actions or evidence.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-word">Implement</div>
+                        <div class="vocab-def">To put a plan or decision into effect; to execute.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-word">Efficient</div>
+                        <div class="vocab-def">Achieving maximum results with minimum wasted effort or resources.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-word">Analyze</div>
+                        <div class="vocab-def">To examine something carefully to understand it better.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-word">Integrity</div>
+                        <div class="vocab-def">The quality of being honest and having strong moral principles.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-word">Prioritize</div>
+                        <div class="vocab-def">To arrange tasks in order of importance.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-word">Resourceful</div>
+                        <div class="vocab-def">Able to find creative solutions and overcome difficulties.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-word">Adaptable</div>
+                        <div class="vocab-def">Able to adjust to new conditions or situations.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-word">Constructive</div>
+                        <div class="vocab-def">Helpful and intended to improve; positive.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-word">Objective</div>
+                        <div class="vocab-def">Based on facts rather than feelings or opinions; unbiased.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-word">Persuasive</div>
+                        <div class="vocab-def">Good at convincing others to believe or do something.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-word">Synthesize</div>
+                        <div class="vocab-def">To combine different ideas or information to form something new.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-word">Credible</div>
+                        <div class="vocab-def">Believable and trustworthy.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-word">Facilitate</div>
+                        <div class="vocab-def">To make a process easier or help it happen smoothly.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-word">Methodical</div>
+                        <div class="vocab-def">Done in a systematic, orderly way.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-word">Tenacious</div>
+                        <div class="vocab-def">Determined and persistent; not giving up easily.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-word">Pragmatic</div>
+                        <div class="vocab-def">Dealing with things in a practical, realistic way.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-word">Comprehensive</div>
+                        <div class="vocab-def">Complete and including all necessary parts or details.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-word">Substantial</div>
+                        <div class="vocab-def">Of considerable importance, size, or worth; significant.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-word">Advocate</div>
+                        <div class="vocab-def">To publicly support or recommend a particular cause or policy.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-word">Exemplify</div>
+                        <div class="vocab-def">To be a perfect example of something; to illustrate.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-word">Innovative</div>
+                        <div class="vocab-def">Featuring new methods or ideas; creative and original.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-word">Coherent</div>
+                        <div class="vocab-def">Logical and consistent; easy to understand.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-word">Discern</div>
+                        <div class="vocab-def">To recognize or understand something clearly.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-word">Assertive</div>
+                        <div class="vocab-def">Confident and direct in claiming one's rights or expressing views.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-word">Reciprocal</div>
+                        <div class="vocab-def">Given or done in return; mutual.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-word">Resilient</div>
+                        <div class="vocab-def">Able to recover quickly from difficulties; tough.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-word">Conducive</div>
+                        <div class="vocab-def">Making a certain situation or outcome likely or possible.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-word">Judicious</div>
+                        <div class="vocab-def">Having or showing good judgment; wise and careful.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-word">Astute</div>
+                        <div class="vocab-def">Having the ability to accurately assess situations; shrewd.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mock Applications Section -->
+        <section id="applications" class="section">
+            <div class="card">
+                <h2>Mock Job Applications</h2>
+                <p style="margin-bottom: 25px;">Practice filling out job applications for different trades. Select a trade below to complete a mock application and receive feedback:</p>
+                
+                <div class="form-group">
+                    <label for="trade-select">Select a Trade:</label>
+                    <select id="trade-select" onchange="loadApplication()">
+                        <option value="">-- Choose a Trade --</option>
+                        <option value="hvac">HVAC Technician</option>
+                        <option value="electrical">Electrician</option>
+                        <option value="plumbing">Plumber</option>
+                        <option value="welding">Welder</option>
+                        <option value="carpentry">Carpenter</option>
+                        <option value="automotive">Automotive Technician</option>
+                    </select>
+                </div>
+
+                <div id="application-form" style="display:none;">
+                    <h3 id="app-title"></h3>
+                    <p style="margin-bottom: 20px; color: var(--gray);">Complete this application as if you were applying for a real position. Take your time and provide thoughtful, professional responses.</p>
+
+                    <form id="job-application" onsubmit="submitApplication(event)">
+                        <div class="form-group">
+                            <label for="app-name">Full Name: *</label>
+                            <input type="text" id="app-name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="app-email">Email Address: *</label>
+                            <input type="email" id="app-email" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="app-phone">Phone Number: *</label>
+                            <input type="tel" id="app-phone" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="app-address">Street Address: *</label>
+                            <input type="text" id="app-address" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="app-city">City: *</label>
+                            <input type="text" id="app-city" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="app-education">Highest Level of Education: *</label>
+                            <select id="app-education" required>
+                                <option value="">-- Select --</option>
+                                <option value="high-school">High School Diploma/GED</option>
+                                <option value="some-college">Some College</option>
+                                <option value="trade-school">Trade School Certificate</option>
+                                <option value="associate">Associate Degree</option>
+                                <option value="bachelor">Bachelor's Degree</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="app-availability">When are you available to start? *</label>
+                            <select id="app-availability" required>
+                                <option value="">-- Select --</option>
+                                <option value="immediately">Immediately</option>
+                                <option value="1-week">Within 1 week</option>
+                                <option value="2-weeks">Within 2 weeks</option>
+                                <option value="1-month">Within 1 month</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="app-why">Writing Prompt 1: Why are you interested in this trade? (Minimum 50 words) *</label>
+                            <textarea id="app-why" required placeholder="Explain what interests you about this career path..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="app-strengths">Writing Prompt 2: What strengths or skills would you bring to this position? (Minimum 50 words) *</label>
+                            <textarea id="app-strengths" required placeholder="Describe your relevant strengths and abilities..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="app-goals">Writing Prompt 3: Where do you see yourself in 5 years in this career? (Minimum 50 words) *</label>
+                            <textarea id="app-goals" required placeholder="Describe your career goals and aspirations..."></textarea>
+                        </div>
+
+                        <button type="submit" class="btn">Submit Application</button>
+                    </form>
+
+                    <div id="app-feedback" class="feedback"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Decision Scenarios Section -->
+        <section id="scenarios" class="section">
+            <div class="card">
+                <h2>Real-Life Decision Making Scenarios</h2>
+                <p style="margin-bottom: 25px;">Practice making decisions in realistic situations. Read each scenario, type your response, and receive feedback on your decision-making and writing:</p>
+                
+                <div id="scenarios-container"></div>
+            </div>
+        </section>
+
+        <!-- Driver's License Test Section -->
+        <section id="drivers-test" class="section">
+            <div class="card">
+                <h2>Tennessee Driver's License Practice Test</h2>
+                <p style="margin-bottom: 25px;">Practice for your Tennessee driver's license test with these common questions. Select your answer for each question:</p>
+                
+                <div class="progress-bar">
+                    <div class="progress-fill" id="test-progress" style="width: 0%"></div>
+                </div>
+                
+                <div id="test-container"></div>
+                
+                <button class="btn" onclick="checkAnswers()" id="check-btn" style="display:none; margin-top: 20px;">Check Answers</button>
+                <div id="test-results" class="feedback"></div>
+            </div>
+        </section>
+
+        <!-- Hiring Companies Section -->
+        <section id="companies" class="section">
+            <div class="card">
+                <h2>Companies Hiring in Nashville/Gallatin Area</h2>
+                <p style="margin-bottom: 25px;">These companies frequently hire for trade positions in the Nashville and Gallatin area:</p>
+                
+                <h3>HVAC Companies</h3>
+                <div class="company-list">
+                    <div class="company-card">
+                        <div class="company-name">Hiller Plumbing, Heating, Cooling & Electrical</div>
+                        <div>Nashville, TN</div>
+                    </div>
+                    <div class="company-card">
+                        <div class="company-name">Lee Company</div>
+                        <div>Nashville & surrounding areas</div>
+                    </div>
+                    <div class="company-card">
+                        <div class="company-name">Bates Electric, Heating & Air Conditioning</div>
+                        <div>Nashville, TN</div>
+                    </div>
+                    <div class="company-card">
+                        <div class="company-name">Goodwin Service Co.</div>
+                        <div>Nashville, TN</div>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: 30px;">Electrical Companies</h3>
+                <div class="company-list">
+                    <div class="company-card">
+                        <div class="company-name">TrustPoint Electric</div>
+                        <div>Nashville area</div>
+                    </div>
+                    <div class="company-card">
+                        <div class="company-name">Hiller Electrical Services</div>
+                        <div>Nashville, TN</div>
+                    </div>
+                    <div class="company-card">
+                        <div class="company-name">Rains Electric</div>
+                        <div>Hendersonville, TN</div>
+                    </div>
+                    <div class="company-card">
+                        <div class="company-name">Hearn Electric</div>
+                        <div>Nashville, TN</div>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: 30px;">Plumbing Companies</h3>
+                <div class="company-list">
+                    <div class="company-card">
+                        <div class="company-name">Lee Company Plumbing</div>
+                        <div>Nashville & surrounding areas</div>
+                    </div>
+                    <div class="company-card">
+                        <div class="company-name">Hiller Plumbing</div>
+                        <div>Nashville, TN</div>
+                    </div>
+                    <div class="company-card">
+                        <div class="company-name">Bates Plumbing</div>
+                        <div>Nashville, TN</div>
+                    </div>
+                    <div class="company-card">
+                        <div class="company-name">Master Service Plumbing</div>
+                        <div>Gallatin, TN</div>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: 30px;">Welding & Manufacturing</h3>
+                <div class="company-list">
+                    <div class="company-card">
+                        <div class="company-name">Bridgestone Americas</div>
+                        <div>La Vergne, TN</div>
+                    </div>
+                    <div class="company-card">
+                        <div class="company-name">Sumner County Metal Works</div>
+                        <div>Gallatin, TN</div>
+                    </div>
+                    <div class="company-card">
+                        <div class="company-name">Nashville Wire Products</div>
+                        <div>Nashville, TN</div>
+                    </div>
+                    <div class="company-card">
+                        <div class="company-name">Lipscomb & Pitts Construction</div>
+                        <div>Nashville area</div>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: 30px;">Carpentry & Construction</h3>
+                <div class="company-list">
+                    <div class="company-card">
+                        <div class="company-name">Turner Construction</div>
+                        <div>Nashville, TN</div>
+                    </div>
+                    <div class="company-card">
+                        <div class="company-name">Brasfield & Gorrie</div>
+                        <div>Nashville, TN</div>
+                    </div>
+                    <div class="company-card">
+                        <div class="company-name">Batson-Cook Company</div>
+                        <div>Nashville area</div>
+                    </div>
+                    <div class="company-card">
+                        <div class="company-name">Hardaway Construction</div>
+                        <div>Nashville, TN</div>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: 30px;">Automotive Services</h3>
+                <div class="company-list">
+                    <div class="company-card">
+                        <div class="company-name">Nissan North America</div>
+                        <div>Smyrna, TN (nearby)</div>
+                    </div>
+                    <div class="company-card">
+                        <div class="company-name">Pep Boys</div>
+                        <div>Nashville area</div>
+                    </div>
+                    <div class="company-card">
+                        <div class="company-name">Christian Brothers Automotive</div>
+                        <div>Multiple Nashville locations</div>
+                    </div>
+                    <div class="company-card">
+                        <div class="company-name">Firestone Complete Auto Care</div>
+                        <div>Nashville & Gallatin</div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 30px; padding: 20px; background: #fef3c7; border-radius: 8px; border-left: 4px solid var(--warning);">
+                    <strong>Job Search Tips:</strong>
+                    <ul style="margin-top: 10px; margin-left: 20px;">
+                        <li>Check company websites for current openings</li>
+                        <li>Visit Indeed.com, LinkedIn, and other job boards</li>
+                        <li>Network with trade school instructors for job leads</li>
+                        <li>Consider apprenticeship programs with these companies</li>
+                        <li>Follow companies on social media for announcements</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Navigation
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('.section');
+            const buttons = document.querySelectorAll('.nav-btn');
+            
+            sections.forEach(section => section.classList.remove('active'));
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(sectionId).classList.add('active');
+            event.target.classList.add('active');
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Trade Toggle
+        function toggleTrade(tradeId) {
+            const content = document.getElementById(tradeId + '-content');
+            const arrow = document.getElementById(tradeId + '-arrow');
+            
+            if (content.classList.contains('show')) {
+                content.classList.remove('show');
+                arrow.textContent = '▼';
+            } else {
+                content.classList.add('show');
+                arrow.textContent = '▲';
+            }
+        }
+
+        // Mock Application
+        function loadApplication() {
+            const trade = document.getElementById('trade-select').value;
+            const form = document.getElementById('application-form');
+            const title = document.getElementById('app-title');
+            
+            if (trade) {
+                const tradeNames = {
+                    'hvac': 'HVAC Technician',
+                    'electrical': 'Electrician',
+                    'plumbing': 'Plumber',
+                    'welding': 'Welder',
+                    'carpentry': 'Carpenter',
+                    'automotive': 'Automotive Technician'
+                };
+                
+                title.textContent = 'Job Application: ' + tradeNames[trade];
+                form.style.display = 'block';
+                document.getElementById('app-feedback').classList.remove('show');
+                document.getElementById('job-application').reset();
+            } else {
+                form.style.display = 'none';
+            }
+        }
+
+        function submitApplication(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('app-email').value;
+            const phone = document.getElementById('app-phone').value;
+            const why = document.getElementById('app-why').value;
+            const strengths = document.getElementById('app-strengths').value;
+            const goals = document.getElementById('app-goals').value;
+            
+            let feedback = '<h3>Application Feedback</h3>';
+            let score = 0;
+            
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (emailRegex.test(email)) {
+                feedback += '<p>✓ <strong>Email format is correct.</strong></p>';
+                score += 10;
+            } else {
+                feedback += '<p>✗ <strong>Email format needs correction.</strong> Make sure it includes @ and a domain (e.g., example@email.com)</p>';
+            }
+            
+            // Phone validation
+            const phoneDigits = phone.replace(/\D/g, '');
+            if (phoneDigits.length === 10) {
+                feedback += '<p>✓ <strong>Phone number is valid.</strong></p>';
+                score += 10;
+            } else {
+                feedback += '<p>✗ <strong>Phone number should have 10 digits.</strong> Example: (615) 555-1234</p>';
+            }
+            
+            // Writing analysis
+            const whyWords = why.trim().split(/\s+/).length;
+            feedback += '<h4>Analysis of "Why are you interested in this trade?"</h4>';
+            
+            if (whyWords < 50) {
+                feedback += '<p>✗ <strong>Too brief (' + whyWords + ' words).</strong> You need at least 50 words. Expand on your interest.</p>';
+            } else {
+                feedback += '<p>✓ <strong>Good length (' + whyWords + ' words).</strong></p>';
+                score += 20;
+                
+                if (!/^[A-Z]/.test(why.trim())) {
+                    feedback += '<p>⚠ <strong>Capitalization:</strong> Start your response with a capital letter.</p>';
+                } else {
+                    score += 5;
+                }
+                
+                if (why.toLowerCase().includes('i dont know') || why.toLowerCase().includes('idk')) {
+                    feedback += '<p>⚠ <strong>Word Choice:</strong> Avoid phrases like "I don\'t know." Be confident and specific.</p>';
+                } else {
+                    score += 10;
+                }
+            }
+            
+            const strengthWords = strengths.trim().split(/\s+/).length;
+            feedback += '<h4>Analysis of "What strengths would you bring?"</h4>';
+            
+            if (strengthWords < 50) {
+                feedback += '<p>✗ <strong>Too brief (' + strengthWords + ' words).</strong> Provide more detail.</p>';
+            } else {
+                feedback += '<p>✓ <strong>Good length (' + strengthWords + ' words).</strong></p>';
+                score += 20;
+                
+                const hasSpecifics = /\b(reliable|hardworking|dedicated|skilled|experience|learn|team|problem|detail|time)\b/i.test(strengths);
+                if (hasSpecifics) {
+                    feedback += '<p>✓ <strong>Good job!</strong> You mentioned specific qualities.</p>';
+                    score += 10;
+                }
+            }
+            
+            const goalsWords = goals.trim().split(/\s+/).length;
+            feedback += '<h4>Analysis of "5-year career goals"</h4>';
+            
+            if (goalsWords < 50) {
+                feedback += '<p>✗ <strong>Too brief (' + goalsWords + ' words).</strong> Employers want to see career ambitions.</p>';
+            } else {
+                feedback += '<p>✓ <strong>Good length (' + goalsWords + ' words).</strong></p>';
+                score += 20;
+                
+                const hasFutureLanguage = /\b(will|plan|hope|want|become|achieve|master|certified|license)\b/i.test(goals);
+                if (hasFutureLanguage) {
+                    feedback += '<p>✓ <strong>Excellent!</strong> You expressed clear future aspirations.</p>';
+                    score += 10;
+                }
+            }
+            
+            feedback += '<hr style="margin: 20px 0;">';
+            feedback += '<h4>Overall Score: ' + score + '/100</h4>';
+            
+            if (score >= 90) {
+                feedback += '<p style="background: #d1fae5; padding: 15px; border-radius: 8px; border-left: 4px solid #10b981; margin: 15px 0;">🌟 Outstanding work! Your application is professional and detailed. You\'re ready!</p>';
+            } else if (score >= 75) {
+                feedback += '<p style="background: #d1fae5; padding: 15px; border-radius: 8px; border-left: 4px solid #10b981; margin: 15px 0;">👏 Great job! Your application is strong. Review the suggestions to make it even better.</p>';
+            } else if (score >= 60) {
+                feedback += '<p style="background: #fef3c7; padding: 15px; border-radius: 8px; border-left: 4px solid #f59e0b; margin: 15px 0;">👍 Good effort! You\'re on the right track. Work on the areas highlighted above.</p>';
+            } else {
+                feedback += '<p style="background: #fee2e2; padding: 15px; border-radius: 8px; border-left: 4px solid #ef4444; margin: 15px 0;">💪 Keep working on it! Review the feedback and try again. You can do this!</p>';
+            }
+            
+            const feedbackDiv = document.getElementById('app-feedback');
+            feedbackDiv.innerHTML = feedback;
+            feedbackDiv.className = 'feedback show ' + (score >= 75 ? 'success' : score >= 60 ? 'warning' : 'error');
+            
+            feedbackDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // Decision Scenarios
+        const scenarios = [
+            {
+                title: "Job Offer Decision",
+                scenario: "You receive two job offers: Company A offers $15/hour with great benefits and training, but it's a 45-minute drive. Company B offers $17/hour but no benefits and is only 15 minutes away. Which would you choose and why?",
+                prompt: "Explain your decision and the factors you considered:"
+            },
+            {
+                title: "Car Trouble",
+                scenario: "Your car breaks down and the repair will cost $800. You have $1,200 saved. Your friend suggests you buy a cheaper used car for $1,000 instead. What would you do?",
+                prompt: "Explain your reasoning:"
+            },
+            {
+                title: "Education vs. Work",
+                scenario: "You can start working full-time immediately at a trade, or attend trade school for 6 months first. The school costs $3,000 but guarantees better job placement. What would you choose?",
+                prompt: "Explain your decision:"
+            },
+            {
+                title: "Peer Pressure",
+                scenario: "Your friends invite you to skip work to hang out. You've never missed a day and have perfect attendance. They say one day won't matter. What do you do?",
+                prompt: "Describe what you would do and why:"
+            },
+            {
+                title: "Money Management",
+                scenario: "You just got your first paycheck of $600. Your bills total $400. You want new shoes for $120 and your friends want to go out this weekend ($50). What would you do?",
+                prompt: "Explain how you would budget:"
+            },
+            {
+                title: "Workplace Conflict",
+                scenario: "A coworker keeps taking credit for your work. Your supervisor praised them for your idea. How would you handle this?",
+                prompt: "Describe your approach:"
+            },
+            {
+                title: "Emergency Situation",
+                scenario: "You're running late to work because of traffic. You'll be 15 minutes late. What do you do?",
+                prompt: "Explain the steps you would take:"
+            },
+            {
+                title: "Career Change",
+                scenario: "You've been working in one trade for 6 months but realize you might prefer a different trade. Switching means starting over. What factors would you consider?",
+                prompt: "List and explain your considerations:"
+            },
+            {
+                title: "Housing Decision",
+                scenario: "You want to move out of your parents' house. You can afford a small apartment for $650/month, but it would use most of your income. Move out now or wait?",
+                prompt: "Explain your reasoning:"
+            },
+            {
+                title: "Tool Investment",
+                scenario: "Your trade requires specialized tools that cost $500. You can buy cheaper versions for $200, but they might not last. You're just starting out. What would you do?",
+                prompt: "Explain your decision:"
+            },
+            {
+                title: "Work-Life Balance",
+                scenario: "Your employer offers overtime every weekend for the next month, giving you an extra $800. However, you'd miss family gatherings and have no free time. What would you decide?",
+                prompt: "Describe your decision and reasoning:"
+            },
+            {
+                title: "Certification Opportunity",
+                scenario: "A certification course costs $400 and takes two weeks of evening classes. It could increase your pay by $3/hour. Is it worth it?",
+                prompt: "Explain your analysis:"
+            },
+            {
+                title: "Transportation Challenge",
+                scenario: "Your car is unreliable. Options: (1) Finance a newer car with $300 monthly payments, (2) Use public transportation/rideshare, or (3) Fix current car for $1,500. What would you choose?",
+                prompt: "Explain your choice:"
+            },
+            {
+                title: "Mistake at Work",
+                scenario: "You made a mistake at work that could cost the company money, but no one has noticed yet. What do you do?",
+                prompt: "Describe your course of action:"
+            },
+            {
+                title: "Friend Financial Request",
+                scenario: "A close friend asks to borrow $200, promising to pay you back in a month. You have the money but need it for bills. What do you do?",
+                prompt: "Explain your response:"
+            },
+            {
+                title: "Safety vs. Speed",
+                scenario: "Your supervisor is pushing you to work faster to meet a deadline, but you feel the pace is unsafe. What would you do?",
+                prompt: "Describe how you would handle this:"
+            },
+            {
+                title: "Side Job Opportunity",
+                scenario: "A friend offers you weekend side work in your trade for extra money, but your current employer has a non-compete clause. What do you consider?",
+                prompt: "Explain your thinking:"
+            },
+            {
+                title: "Health Insurance",
+                scenario: "Your employer offers health insurance for $80/month from your paycheck. You're young and healthy. Should you take it or save the money?",
+                prompt: "Explain your reasoning:"
+            },
+            {
+                title: "Relocation Opportunity",
+                scenario: "A company in another city offers you a job with $5/hour more, but you'd have to move away from family and friends. What factors influence your decision?",
+                prompt: "List and explain your considerations:"
+            },
+            {
+                title: "Learning Opportunity",
+                scenario: "Your employer offers to train you in a new skill not in your job description. It means extra work with no extra pay initially, but could lead to advancement. What would you do?",
+                prompt: "Explain your decision:"
+            }
+        ];
+
+        function initializeScenarios() {
+            const container = document.getElementById('scenarios-container');
+            scenarios.forEach(function(scenario, index) {
+                const scenarioDiv = document.createElement('div');
+                scenarioDiv.className = 'scenario-card';
+                scenarioDiv.innerHTML = '<h3>Scenario ' + (index + 1) + ': ' + scenario.title + '</h3>' +
+                    '<p style="margin: 15px 0; padding: 15px; background: #f9f9f9; border-radius: 8px;">' + scenario.scenario + '</p>' +
+                    '<div class="form-group">' +
+                    '<label>' + scenario.prompt + '</label>' +
+                    '<textarea id="scenario-' + index + '" style="min-height: 120px;" placeholder="Type your response here..."></textarea>' +
+                    '</div>' +
+                    '<button class="btn" onclick="analyzeScenario(' + index + ')">Analyze My Response</button>' +
+                    '<div id="scenario-feedback-' + index + '" class="feedback"></div>';
+                container.appendChild(scenarioDiv);
+            });
+        }
+
+        function analyzeScenario(index) {
+            const response = document.getElementById('scenario-' + index).value.trim();
+            const feedbackDiv = document.getElementById('scenario-feedback-' + index);
+            
+            if (!response) {
+                feedbackDiv.innerHTML = '<p>Please write a response before requesting analysis.</p>';
+                feedbackDiv.className = 'feedback show warning';
+                return;
+            }
+            
+            const wordCount = response.split(/\s+/).length;
+            let feedback = '<h4>Response Analysis</h4>';
+            let score = 0;
+            
+            if (wordCount < 30) {
+                feedback += '<p>⚠ <strong>Too brief (' + wordCount + ' words).</strong> Provide more detail. Aim for at least 50 words.</p>';
+            } else if (wordCount < 50) {
+                feedback += '<p>⚠ <strong>Adequate length (' + wordCount + ' words).</strong> You could add more detail.</p>';
+                score += 20;
+            } else {
+                feedback += '<p>✓ <strong>Good length (' + wordCount + ' words).</strong></p>';
+                score += 30;
+            }
+            
+            if (!/^[A-Z]/.test(response)) {
+                feedback += '<p>✗ <strong>Grammar:</strong> Start with a capital letter.</p>';
+            } else {
+                score += 10;
+            }
+            
+            const sentences = response.match(/[^.!?]+[.!?]+/g) || [];
+            if (sentences.length < 2) {
+                feedback += '<p>⚠ <strong>Sentence Structure:</strong> Use multiple sentences to organize your thoughts.</p>';
+            } else {
+                score += 10;
+            }
+            
+            const hasReasoning = /\bbecause\b|\bsince\b|\bso\b|\btherefore\b|\bhowever\b|\balthough\b/i.test(response);
+            if (hasReasoning) {
+                feedback += '<p>✓ <strong>Good reasoning!</strong> You explained the "why" behind your decision.</p>';
+                score += 20;
+            } else {
+                feedback += '<p>⚠ <strong>Suggestion:</strong> Explain WHY you made your choice using words like "because" or "therefore."</p>';
+            }
+            
+            const redFlags = ['dont care', 'doesn\'t matter', 'whatever', 'who cares', 'idk', 'i dont know'];
+            const hasRedFlag = redFlags.some(function(flag) {
+                return response.toLowerCase().includes(flag);
+            });
+            
+            if (hasRedFlag) {
+                feedback += '<p>✗ <strong>Reconsider your response.</strong> Show that you\'re thinking through the decision carefully.</p>';
+                score = Math.max(0, score - 30);
+            } else {
+                score += 15;
+            }
+            
+            const vocabWords = ['diligent', 'reliable', 'responsible', 'professional', 'consider', 'evaluate', 'prioritize', 'balance'];
+            const usedVocab = vocabWords.some(function(word) {
+                return response.toLowerCase().includes(word);
+            });
+            if (usedVocab) {
+                feedback += '<p>✓ <strong>Excellent vocabulary!</strong> You used professional language.</p>';
+                score += 10;
+            }
+            
+            feedback += '<hr style="margin: 20px 0;"><h4>Overall Assessment: ' + Math.min(100, score) + '/100</h4>';
+            
+            if (score >= 80) {
+                feedback += '<p style="background: #d1fae5; padding: 15px; border-radius: 8px; border-left: 4px solid #10b981; margin: 15px 0;">🌟 Excellent decision-making! You considered multiple factors and explained your reasoning clearly.</p>';
+            } else if (score >= 60) {
+                feedback += '<p style="background: #d1fae5; padding: 15px; border-radius: 8px; border-left: 4px solid #10b981; margin: 15px 0;">👍 Good thinking! You\'re showing solid decision-making skills.</p>';
+            } else if (score >= 40) {
+                feedback += '<p style="background: #fef3c7; padding: 15px; border-radius: 8px; border-left: 4px solid #f59e0b; margin: 15px 0;">⚠ You\'re on the right track, but your response needs more development.</p>';
+            } else {
+                feedback += '<p style="background: #fee2e2; padding: 15px; border-radius: 8px; border-left: 4px solid #ef4444; margin: 15px 0;">💭 Take more time with this. Good decisions require careful thought.</p>';
+            }
+            
+            feedbackDiv.innerHTML = feedback;
+            feedbackDiv.className = 'feedback show ' + (score >= 70 ? 'success' : score >= 50 ? 'warning' : 'error');
+            feedbackDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // Driver's License Test
+        const driverQuestions = [
+            {
+                question: "What does a red octagonal sign mean?",
+                options: ["Yield", "Stop", "Caution", "No Parking"],
+                correct: 1
+            },
+            {
+                question: "What is the speed limit in a school zone when children are present?",
+                options: ["15 mph", "25 mph", "35 mph", "45 mph"],
+                correct: 0
+            },
+            {
+                question: "When approaching a stopped school bus with flashing red lights, you must:",
+                options: ["Slow down to 15 mph", "Stop at least 20 feet away", "Proceed with caution", "Change lanes"],
+                correct: 1
+            },
+            {
+                question: "A solid yellow line on your side of the road means:",
+                options: ["You may pass if safe", "No passing allowed", "Two-way traffic ahead", "Yield to oncoming traffic"],
+                correct: 1
+            },
+            {
+                question: "What should you do if your brakes fail while driving?",
+                options: ["Turn off the engine", "Pump the brakes and use emergency brake gradually", "Swerve to the shoulder immediately", "Shift to neutral and coast"],
+                correct: 1
+            },
+            {
+                question: "When parking uphill with a curb, you should:",
+                options: ["Turn wheels toward the curb", "Turn wheels away from the curb", "Leave wheels straight", "It doesn't matter"],
+                correct: 1
+            },
+            {
+                question: "What is the blood alcohol limit for drivers under 21 in Tennessee?",
+                options: ["0.00%", "0.02%", "0.05%", "0.08%"],
+                correct: 1
+            },
+            {
+                question: "When must you use headlights in Tennessee?",
+                options: ["After 8 PM only", "From sunset to sunrise and in bad weather", "Only when raining", "Only on highways"],
+                correct: 1
+            },
+            {
+                question: "A flashing yellow light means:",
+                options: ["Stop completely", "Proceed with caution", "Speed up", "Yield to all traffic"],
+                correct: 1
+            },
+            {
+                question: "How far ahead should you signal before turning?",
+                options: ["25 feet", "50 feet", "100 feet", "200 feet"],
+                correct: 2
+            },
+            {
+                question: "What is the legal BAC limit for drivers 21 and over?",
+                options: ["0.04%", "0.06%", "0.08%", "0.10%"],
+                correct: 2
+            },
+            {
+                question: "When driving in fog, you should use:",
+                options: ["High beam headlights", "Low beam headlights", "Parking lights only", "Emergency flashers"],
+                correct: 1
+            },
+            {
+                question: "What does a yellow diamond-shaped sign indicate?",
+                options: ["Railroad crossing", "Warning of road conditions ahead", "Construction zone", "School zone"],
+                correct: 1
+            },
+            {
+                question: "Following distance should be at least:",
+                options: ["1 second", "2 seconds", "3 seconds", "5 seconds"],
+                correct: 2
+            },
+            {
+                question: "When entering a highway from an entrance ramp, you should:",
+                options: ["Stop and wait for an opening", "Accelerate to match highway speed", "Enter slowly and speed up", "Turn on hazard lights"],
+                correct: 1
+            },
+            {
+                question: "What does a white rectangular sign indicate?",
+                options: ["Warning", "Regulation/law", "Guide/direction", "Construction"],
+                correct: 1
+            },
+            {
+                question: "When parking downhill, you should:",
+                options: ["Turn wheels toward curb", "Turn wheels away from curb", "Leave wheels straight", "Set parking brake only"],
+                correct: 0
+            },
+            {
+                question: "If you are involved in an accident, you must report it if damage exceeds:",
+                options: ["$50", "$400", "$1,500", "$5,000"],
+                correct: 1
+            },
+            {
+                question: "What does a green light mean?",
+                options: ["Go if clear", "Go immediately", "Yield then go", "Speed up"],
+                correct: 0
+            },
+            {
+                question: "Tennessee's 'Move Over' law requires you to:",
+                options: ["Slow down near emergency vehicles", "Change lanes away from stopped emergency vehicles", "Stop completely", "Turn on hazards"],
+                correct: 1
+            }
+        ];
+
+        const selectedAnswers = {};
+
+        function initializeDriverTest() {
+            const container = document.getElementById('test-container');
+            driverQuestions.forEach(function(q, index) {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'quiz-question';
+                
+                let optionsHTML = '<ul class="quiz-options">';
+                q.options.forEach(function(option, optIndex) {
+                    optionsHTML += '<li onclick="selectAnswer(' + index + ', ' + optIndex + ')" id="q' + index + '-opt' + optIndex + '">' + option + '</li>';
+                });
+                optionsHTML += '</ul>';
+                
+                questionDiv.innerHTML = '<strong>Question ' + (index + 1) + ':</strong> ' + q.question + optionsHTML;
+                container.appendChild(questionDiv);
+            });
+            
+            document.getElementById('check-btn').style.display = 'block';
+        }
+
+        function selectAnswer(questionIndex, optionIndex) {
+            for (let i = 0; i < 4; i++) {
+                const opt = document.getElementById('q' + questionIndex + '-opt' + i);
+                if (opt) opt.classList.remove('selected');
+            }
+            
+            document.getElementById('q' + questionIndex + '-opt' + optionIndex).classList.add('selected');
+            selectedAnswers[questionIndex] = optionIndex;
+            
+            const progress = (Object.keys(selectedAnswers).length / driverQuestions.length) * 100;
+            document.getElementById('test-progress').style.width = progress + '%';
+        }
+
+        function checkAnswers() {
+            let correct = 0;
+            let feedback = '<h3>Test Results</h3>';
+            
+            driverQuestions.forEach(function(q, index) {
+                const selected = selectedAnswers[index];
+                const correctAnswer = q.correct;
+                
+                if (selected !== undefined) {
+                    for (let i = 0; i < 4; i++) {
+                        const opt = document.getElementById('q' + index + '-opt' + i);
+                        opt.style.pointerEvents = 'none';
+                        
+                        if (i === correctAnswer) {
+                            opt.classList.add('correct');
+                        }
+                        if (selected === i && selected !== correctAnswer) {
+                            opt.classList.add('incorrect');
+                        }
+                    }
+                    
+                    if (selected === correctAnswer) {
+                        correct++;
+                    }
+                }
+            });
+            
+            const percentage = ((correct / driverQuestions.length) * 100).toFixed(0);
+            const passed = percentage >= 80;
+            
+            feedback += '<p style="font-size: 1.3rem; font-weight: 700;">Score: ' + correct + '/' + driverQuestions.length + ' (' + percentage + '%)</p>';
+            
+            if (passed) {
+                feedback += '<p style="background: #d1fae5; padding: 15px; border-radius: 8px; border-left: 4px solid #10b981; margin: 15px 0;">🎉 <strong>Congratulations! You passed!</strong> In Tennessee, you need 80% to pass. You\'re ready!</p>';
+            } else {
+                feedback += '<p style="background: #fef3c7; padding: 15px; border-radius: 8px; border-left: 4px solid #f59e0b; margin: 15px 0;">📚 <strong>Keep studying!</strong> You need 80% to pass. Review the questions you missed.</p>';
+            }
+            
+            feedback += '<button class="btn btn-secondary" onclick="resetTest()" style="margin-top: 15px;">Retake Test</button>';
+            
+            const resultsDiv = document.getElementById('test-results');
+            resultsDiv.innerHTML = feedback;
+            resultsDiv.className = 'feedback show ' + (passed ? 'success' : 'warning');
+            
+            document.getElementById('check-btn').style.display = 'none';
+        }
+
+        function resetTest() {
+            for (let key in selectedAnswers) {
+                delete selectedAnswers[key];
+            }
+            
+            driverQuestions.forEach(function(q, index) {
+                for (let i = 0; i < 4; i++) {
+                    const opt = document.getElementById('q' + index + '-opt' + i);
+                    if (opt) {
+                        opt.classList.remove('selected', 'correct', 'incorrect');
+                        opt.style.pointerEvents = 'auto';
+                    }
+                }
+            });
+            
+            document.getElementById('test-progress').style.width = '0%';
+            document.getElementById('test-results').innerHTML = '';
+            document.getElementById('test-results').className = 'feedback';
+            document.getElementById('check-btn').style.display = 'block';
+            
+            window.scrollTo({ top: document.getElementById('drivers-test').offsetTop - 100, behavior: 'smooth' });
+        }
+
+        // Initialize on page load
+        window.addEventListener('load', function() {
+            initializeScenarios();
+            initializeDriverTest();
+        });
+    </script>
+</body>
+</html>
